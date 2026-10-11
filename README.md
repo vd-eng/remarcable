@@ -8,6 +8,17 @@ Users are able to search and filter products based on product description, categ
 * **filter** products by tags.
 * Users should be able to combine search and filter options.
 
+## Design decisions and implementation details
+
+Implement three models `Tag`, `Category` and `Product`.
+
+* `Category` -> `Product` demonstrates one-to-many relationship.
+* `Tag` -> `Product` demonstrates many-to-many relationship.
+
+Since `description` is a free-form text, it's implemented as the `TextField` type. While in a small demo project like this we'll keep the implementation simple, scaling in production with a databse like PostgreSQL might require additional attention.
+
+To be able to filter independently or using any combination of the specified properties, three filters are implemented on a product queryset. We can chain them together to filter products as required.
+
 ## Project structure
 
 The project's structure is based on the django tutorial found here https://docs.djangoproject.com/en/6.1/intro/tutorial01/ .
