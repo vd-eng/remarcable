@@ -1,0 +1,9 @@
+[project]
+name = "remarcable"
+version = "0.1.0"
+description = "The assessment test"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "django>=6.1.2",
+]
