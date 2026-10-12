@@ -1,3 +1,9 @@
+<form method="get">
+    {{ filter_form.as_p }}
+    <button type="submit">Search</button>
+    <a href="{% url 'index' %}">Clear</a>
+</form>
+
 {% if product_list %}
     <table>
         <thead>
@@ -19,6 +25,8 @@
         {% endfor %}
         </tbody>
     </table>
+{% elif filter_form.is_bound %}
+    <p>No products match your search criteria.</p>
 {% else %}
     <p>No products are available.</p>
 {% endif %}

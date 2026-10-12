@@ -41,6 +41,11 @@ class ProductQuerySet(models.QuerySet):
             return self
         return self.filter(category_id=category_id)
 
+    def of_categories(self, category_ids: Iterable[int]) -> 'ProductQuerySet':
+        if not category_ids:
+            return self
+        return self.filter(category_id__in=category_ids)
+
     def assigned_tags(self, tag_ids: Iterable[int]) -> 'ProductQuerySet':
         if not tag_ids:
             return self
