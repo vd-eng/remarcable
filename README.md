@@ -15,9 +15,39 @@ Implement three models `Tag`, `Category` and `Product`.
 * `Category` -> `Product` demonstrates one-to-many relationship.
 * `Tag` -> `Product` demonstrates many-to-many relationship.
 
-Since `description` is a free-form text, it's implemented as the `TextField` type. While in a small demo project like this we'll keep the implementation simple, scaling in production with a databse like PostgreSQL might require additional attention.
+Since `description` is a free-form text, it's implemented as the `TextField` type. While in a small demo project like this we'll keep the implementation simple. Scaling in production with a database like PostgreSQL might require additional attention.
 
-To be able to filter independently or using any combination of the specified properties, three filters are implemented on a product queryset. We can chain them together to filter products as required.
+To be able to filter independently or using any combination of the specified properties, three filters are implemented on a product queryset. We can chain them together to filter products as required:
+
+* search
+* of_category
+* assigned_tags
+
+In this project, the focus is on functionality and query implementation, so the UI implementation is very basic and  uses Django templates.
+
+## Quick start
+
+Assuming you have cloned the repository and have the repo root directory opened in the terminal.
+
+Install [uv](https://docs.astral.sh/uv/):
+
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Create virtual environment and install project dependencies:
+
+```sh
+uv sync
+```
+
+Start the development server:
+
+```bash
+uv run manage.py runserver
+```
+
+Use a web-browser to open the link http://127.0.0.1:8000/products/ .
 
 ## Project structure
 
@@ -54,6 +84,8 @@ products/
 ## Initially seeded data
 
 Initially, the sqlite DB is seeded with 20 products, 10 tags, and 5 categories.
+The seeded data is populated with a migration.
+On second thought, doing that with Django custom [commands](https://docs.djangoproject.com/en/6.1/howto/custom-management-commands/) whould have been a better choice.
 
 ## Project management and useful commands
 
@@ -102,8 +134,16 @@ Apply DB migrations:
 uv run manage.py migrate
 ```
 
-## Running tests
+## Tests
+
+There are some tests implemented. These are not comprehensive, but rather to demonstrate the basics.
+
+To run the tests, execute the following command in the terminal:
 
 ```sh
 uv run manage.py test products
 ```
+
+## AI use
+
+AI was used to generate seeded data examples. Also, a small code snippet showing how to hook up a filter form to the view.
