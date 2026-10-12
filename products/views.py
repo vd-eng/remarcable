@@ -1,8 +1,11 @@
-from django.http import (
-    HttpRequest,
-    HttpResponse,
-)
+from django.views import generic
+
+from .models import Product
 
 
-def index(request: HttpRequest) -> HttpResponse:
-    return HttpResponse("Products.")
+class IndexView(generic.ListView):
+    template_name = 'products/index.html'
+    context_object_name = 'product_list'
+
+    def get_queryset(self):
+        return Product.objects.all()

@@ -61,6 +61,11 @@ class Product(models.Model):
         blank=True
     )
 
+    @property
+    def tags_as_str(self) -> str:
+        """Simple tags representation for rendering in a view."""
+        return ','.join([tag.name for tag in self.tags.all()])
+
     objects = ProductQuerySet.as_manager()  # Use custom manager with custom filters
 
     def __str__(self) -> str:
