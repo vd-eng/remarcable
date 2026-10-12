@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.db import models
 
 
@@ -40,10 +41,10 @@ class ProductQuerySet(models.QuerySet):
             return self
         return self.filter(category_id=category_id)
 
-    def assigned_tags(self, tag_ids) -> 'ProductQuerySet':
+    def assigned_tags(self, tag_ids: Iterable[int]) -> 'ProductQuerySet':
         if not tag_ids:
             return self
-        return self.filter(tags__in=tag_ids)
+        return self.filter(tags__in=tag_ids).distinct()
 
 
 class Product(models.Model):
