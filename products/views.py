@@ -12,7 +12,10 @@ class IndexView(generic.ListView):
         self.product_filter = ProductFilter(self.request.GET or None)
 
         # NOTE: Check if we need to optimize the query here
-        qs = Product.objects.add_tags_as_str()
+        qs = (Product.objects
+            .add_category_name()
+            .add_tags_as_str()
+        )
 
         if not self.product_filter.is_bound:
             return qs.all()
