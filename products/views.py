@@ -11,7 +11,6 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         self.product_filter = ProductFilter(self.request.GET or None)
 
-        # NOTE: Check if we need to optimize the query here
         qs = (Product.objects
             .add_category_name()
             .add_tags_as_str()
