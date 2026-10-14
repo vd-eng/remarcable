@@ -25,7 +25,7 @@ class IndexView(generic.ListView):
 
         data = self.product_filter.cleaned_data
         what = data.get('q')
-        categories = data.get('categories')
+        categories = data.get('categories') or []
         category_ids = [category.pk for category in categories]
         tags = data.get('tags') or []
         tag_ids = [tag.pk for tag in tags]
