@@ -53,7 +53,11 @@ class ProductQuerySet(models.QuerySet):
     def assigned_tags(self, tag_ids: Iterable[int]) -> 'ProductQuerySet':
         if not tag_ids:
             return self
-        return self.filter(tags__in=tag_ids).distinct()
+        return self.filter(
+            pk__in=Product.tags.through.objects
+                .filter(tag_id__in=tag_ids)
+                .values('product_id')
+        )
 
     def add_tags_as_str(self) -> 'ProductQuerySet':
         """Simple tags representation to help rendering in a view."""

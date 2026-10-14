@@ -4,14 +4,14 @@ from django.db.models import Aggregate, CharField
 class GroupConcat(Aggregate):
     """Database agnostic 'GROUP_CONCAT'."""
     function = 'GROUP_CONCAT'
-    template = '%(function)s(%(distinct)s%(expressions)s%(ordering)s%(separator)s)'
+    template = '%(function)s(%(distinct_)s%(expressions)s%(ordering)s%(separator)s)'
 
-    def __init__(self, expressions, distinct=False, ordering=None, separator=',', **extra):
+    def __init__(self, expressions, distinct_=False, ordering=None, separator=',', **extra):
         super().__init__(
             expressions,
-            distinct='DISTINCT ' if distinct else '',
+            distinct_='DISTINCT ' if distinct_ else '',
             ordering=' ORDER BY %s' % ordering if ordering is not None else '',
-            separator=", '%s'" % separator,
+            separator=(", '%s'" % separator) if separator != ',' else '',
             output_field=CharField(),
             **extra
         )
