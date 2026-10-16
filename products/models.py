@@ -1,5 +1,8 @@
 from collections.abc import Iterable
+
 from django.db import models
+
+from .aggregates import GroupConcat
 
 
 class Tag(models.Model):
@@ -51,6 +54,10 @@ class ProductQuerySet(models.QuerySet):
             return self
         return self.filter(tags__in=tag_ids).distinct()
 
+    def add_tags_as_str(self) -> 'ProductQuerySet':
+        """Simple tags representation to help rendering in a view."""
+        return self.annotate(tags_as_str=GroupConcat('tags__name'))
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -65,11 +72,6 @@ class Product(models.Model):
         related_name='products',
         blank=True
     )
-
-    @property
-    def tags_as_str(self) -> str:
-        """Simple tags representation for rendering in a view."""
-        return ','.join([tag.name for tag in self.tags.all()])
 
     objects = ProductQuerySet.as_manager()  # Use custom manager with custom filters
 
