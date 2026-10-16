@@ -58,6 +58,7 @@ class ProductQuerySet(models.QuerySet):
                 .filter(tag_id__in=tag_ids)
                 .values('product_id')
         )
+        # return self.filter(tags__in=tag_ids)
 
     def add_tags_as_str(self) -> 'ProductQuerySet':
         """Simple tags representation to help rendering in a view."""

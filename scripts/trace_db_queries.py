@@ -20,9 +20,15 @@ settings.ALLOWED_HOSTS.append('*')
 
 client = Client()
 
+# GET '/products/?q=&tags=7&tags=8&tags=2'
+data = {
+    'q': '',
+    'tags': [7, 8, 2]
+}
+
 # Use the context manager to intercept queries in an active DB connection
 with CaptureQueriesContext(connection) as db:
-    response = client.get(reverse('index'))
+    response = client.get(reverse('index'), data=data)
 
 queries_executed = len(db.captured_queries)
 print(f'Total queries executed: {queries_executed}')
