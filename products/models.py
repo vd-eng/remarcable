@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 
 from django.db import models
+from django.db.models import F
 
 from .aggregates import GroupConcat
 
@@ -52,11 +53,19 @@ class ProductQuerySet(models.QuerySet):
     def assigned_tags(self, tag_ids: Iterable[int]) -> 'ProductQuerySet':
         if not tag_ids:
             return self
-        return self.filter(tags__in=tag_ids).distinct()
+        return self.filter(
+            pk__in=Product.tags.through.objects
+                .filter(tag_id__in=tag_ids)
+                .values('product_id')
+        )
+        # return self.filter(tags__in=tag_ids)
 
     def add_tags_as_str(self) -> 'ProductQuerySet':
         """Simple tags representation to help rendering in a view."""
         return self.annotate(tags_as_str=GroupConcat('tags__name'))
+
+    def add_category_name(self) -> 'ProductQuerySet':
+        return self.annotate(category_name=F('category__name'))
 
 
 class Product(models.Model):

@@ -11,8 +11,26 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         self.product_filter = ProductFilter(self.request.GET or None)
 
-        # NOTE: Check if we need to optimize the query here
-        qs = Product.objects.add_tags_as_str()
+        # Some of the possible optimizations options is:
+        #
+        # ```
+        # qs = (Product.objects
+        #     .select_related('category')
+        #     .prefetch_related('tags')
+        # )
+        # ```
+        #
+        # What it does is it fetches data for both the primary and the related
+        # one-to-many models for `select_related`. For `prefetch_related`,
+        # it executes a separate database lookup for each specified relationship and
+        # joins the results in Python memory.
+        # I don't use that, because the related data (category, tags) is already "straighten"
+        # in the queryset via annotations.
+        #
+        qs = (Product.objects
+            .add_category_name()
+            .add_tags_as_str()
+        )
 
         if not self.product_filter.is_bound:
             return qs.all()
@@ -22,7 +40,7 @@ class IndexView(generic.ListView):
 
         data = self.product_filter.cleaned_data
         what = data.get('q')
-        categories = data.get('categories')
+        categories = data.get('categories') or []
         category_ids = [category.pk for category in categories]
         tags = data.get('tags') or []
         tag_ids = [tag.pk for tag in tags]
