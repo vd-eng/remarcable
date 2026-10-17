@@ -1,32 +1,55 @@
-<form method="get">
-    {{ filter_form.as_p }}
-    <button type="submit">Search</button>
-    <a href="{% url 'index' %}">Clear</a>
-</form>
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Products</title>
+    <link rel="stylesheet" href="{% static 'products/index.css' %}">
+    <script src="{% static 'products/index.js' %}" defer></script>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar" id="filter-panel">
+        <h2>Filter</h2>
+        <form method="get">
+            {{ filter_form.as_div }}
+            <div class="form-actions">
+                <button type="submit">Search</button>
+                <a href="{% url 'index' %}">Clear</a>
+            </div>
+        </form>
+    </aside>
 
-{% if product_list %}
-    <table>
-        <thead>
-            <tr>
-                <th>Product name</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Tags</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in product_list %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.description}}</td>
-                <td>{{ product.category_name }}</td>
-                <td>{{ product.tags_as_str }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% elif filter_form.is_bound %}
-    <p>No products match your search criteria.</p>
-{% else %}
-    <p>No products are available.</p>
-{% endif %}
+    <main class="content">
+        <button type="button" class="panel-toggle" aria-controls="filter-panel" aria-expanded="true">Hide filters</button>
+
+        {% if product_list %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product name</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Tags</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for product in product_list %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.description}}</td>
+                        <td>{{ product.category_name }}</td>
+                        <td>{{ product.tags_as_str }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% elif filter_form.is_bound %}
+            <p>No products match your search criteria.</p>
+        {% else %}
+            <p>No products are available.</p>
+        {% endif %}
+    </main>
+</div>
+</body>
+</html>
